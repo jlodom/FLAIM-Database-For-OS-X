@@ -24,6 +24,8 @@
 //------------------------------------------------------------------------------
 
 #include "ftksys.h"
+// JLO2 110808: Added to stop compiler error.
+#include <signal.h>
 
 #ifdef FLM_UNIX
 	pid_t getpid( void);

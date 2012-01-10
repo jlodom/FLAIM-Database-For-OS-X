@@ -354,7 +354,7 @@ void ftkFastChecksum(
 			"			mov		%%ecx, %%edi\n" 
 			
 			"			cmp		$32, %%ecx\n"
-			"			jb			MediumStuff\n" 					
+			"			jb			1f\n" 					
 			
 			"			shr		$5, %%ecx\n"
 			"			and		$0x01F, %%edi\n"
@@ -362,7 +362,7 @@ void ftkFastChecksum(
 			"			movd		%%edx, %%mm4\n"
 			"			movd		%%ebx, %%mm5\n"
 			
-			"BigStuffLoop:\n"
+			"0:\n"
 			"			movq		(%%esi), %%mm0\n"
 			"			movq		8(%%esi), %%mm1\n"
 			"			movq		16(%%esi), %%mm2\n"
@@ -378,7 +378,7 @@ void ftkFastChecksum(
 			"			pxor		%%mm3, %%mm5\n"
 			"			dec		%%ecx\n"
 			
-			"			jnz		BigStuffLoop\n" 
+			"			jnz		0b\n" 
 			"			movd		%%mm5, %%ebx\n"
 			"			psrlq		$32, %%mm5\n"
 			"			movd		%%mm5, %%eax\n"
@@ -394,13 +394,13 @@ void ftkFastChecksum(
 			
 			"			mov		%%edi, %%ecx\n"
 			
-			"MediumStuff:\n"
+			"1:\n"
 			"			cmp		$4, %%ecx\n"
-			"			jb			SmallStuff\n"
+			"			jb			3f\n"
 			"			shr		$2, %%ecx\n"
 			"			and		$3, %%edi\n"
 			
-			"MediumStuffLoop:\n"
+			"2:\n"
 			"			mov		(%%esi), %%eax\n"
 			"			add		$4, %%esi\n"
 			"			xor		%%eax, %%ebx\n"
@@ -410,26 +410,26 @@ void ftkFastChecksum(
 			"			add		%%al, %%dl\n"
 			"			add		%%ah, %%dh\n"
 			"			dec		%%ecx\n"
-			"			jnz		MediumStuffLoop\n"
+			"			jnz		2b\n"
 			"			mov		%%edi, %%ecx\n"
 			
-			"SmallStuff:\n"
+			"3:\n"
 			"			add		%%dh, %%dl\n" 
 			"			mov		%%ebx, %%eax\n"
 			"			shr		$16, %%eax\n"				
 			"			xor		%%ax, %%bx\n" 							
 			"			xor		%%bh, %%bl\n"							
 			"			cmp		$0, %%ecx\n" 
-			"			jz			Done\n" 							
+			"			jz			5f\n" 							
 			
-			"SmallStuffLoop:\n" 						
+			"4:\n" 						
 			"			mov		(%%esi), %%al\n" 						
 			"			inc		%%esi\n"								
 			"			add		%%al, %%dl\n" 							
 			"			xor		%%al, %%bl\n" 							
 			"			dec		%%ecx\n" 							
-			"			jnz		SmallStuffLoop\n" 				
-			"Done:\n" 									
+			"			jnz		4b\n" 				
+			"5:\n" 									
 			"			and		$0xFF, %%edx\n" 
 			"			and		$0xFF, %%ebx\n" 
 			
@@ -447,6 +447,10 @@ void ftkFastChecksum(
 
 /********************************************************************
 Desc:
+JLO2 120109: Replaced labels with numbers for OS X GCC compilation.
+ASM volatile (inline) values throw symbol defined errors unless you
+do this.
+https://groups.google.com/group/comp.os.msdos.djgpp/browse_thread/thread/ad1cb93f6b7f8c70/73082588aa6c0293?pli=1
 *********************************************************************/
 #if defined( FLM_X86) && defined( FLM_64BIT) && defined( FLM_GNUC)
 void ftkFastChecksum(
@@ -467,7 +471,7 @@ void ftkFastChecksum(
 			"			mov		%%ecx, %%edi\n" 
 			
 			"			cmp		$32, %%ecx\n"
-			"			jb			MediumStuff\n" 					
+			"			jb			1f\n" 					
 			
 			"			shr		$5, %%ecx\n"
 			"			and		$0x01F, %%edi\n"
@@ -475,7 +479,7 @@ void ftkFastChecksum(
 			"			movd		%%edx, %%mm4\n"
 			"			movd		%%ebx, %%mm5\n"
 			
-			"BigStuffLoop:\n"
+			"0:\n"
 			"			movq		(%%r8), %%mm0\n"
 			"			movq		8(%%r8), %%mm1\n"
 			"			movq		16(%%r8), %%mm2\n"
@@ -491,7 +495,7 @@ void ftkFastChecksum(
 			"			pxor		%%mm3, %%mm5\n"
 			"			dec		%%ecx\n"
 			
-			"			jnz		BigStuffLoop\n" 
+			"			jnz		0b\n" 
 			"			movd		%%mm5, %%ebx\n"
 			"			psrlq		$32, %%mm5\n"
 			"			movd		%%mm5, %%eax\n"
@@ -507,13 +511,13 @@ void ftkFastChecksum(
 			
 			"			mov		%%edi, %%ecx\n"
 			
-			"MediumStuff:\n"
+			"1:\n"
 			"			cmp		$4, %%ecx\n"
-			"			jb			SmallStuff\n"
+			"			jb			3f\n"
 			"			shr		$2, %%ecx\n"
 			"			and		$3, %%edi\n"
 			
-			"MediumStuffLoop:\n"
+			"2:\n"
 			"			mov		(%%r8), %%eax\n"
 			"			add		$4, %%r8\n"
 			"			xor		%%eax, %%ebx\n"
@@ -523,26 +527,26 @@ void ftkFastChecksum(
 			"			add		%%al, %%dl\n"
 			"			add		%%ah, %%dh\n"
 			"			dec		%%ecx\n"
-			"			jnz		MediumStuffLoop\n"
+			"			jnz		2b\n"
 			"			mov		%%edi, %%ecx\n"
 			
-			"SmallStuff:\n"
+			"3:\n"
 			"			add		%%dh, %%dl\n" 
 			"			mov		%%ebx, %%eax\n"
 			"			shr		$16, %%eax\n"				
 			"			xor		%%ax, %%bx\n" 							
 			"			xor		%%bh, %%bl\n"							
 			"			cmp		$0, %%ecx\n" 
-			"			jz			Done\n" 							
+			"			jz			5f\n" 							
 			
-			"SmallStuffLoop:\n" 						
+			"4:\n" 						
 			"			mov		(%%r8), %%al\n" 						
 			"			inc		%%r8\n"								
 			"			add		%%al, %%dl\n"
 			"			xor		%%al, %%bl\n" 							
 			"			dec		%%ecx\n" 							
-			"			jnz		SmallStuffLoop\n" 				
-			"Done:\n" 									
+			"			jnz		4b\n" 				
+			"5:\n" 									
 			"			and		$0xFF, %%edx\n" 
 			"			and		$0xFF, %%ebx\n" 
 			

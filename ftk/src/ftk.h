@@ -190,7 +190,7 @@
 				#define FLM_PPC
 				#define FLM_BIG_ENDIAN
 				#define FLM_STRICT_ALIGNMENT			
-			#elif defined( __x86__) || defined( __x86_64__)
+			#elif defined( __x86__) || defined( __i386__) || defined( __x86_64__)  
 				#define FLM_X86
 			#else
 				#error Platform architecture not supported

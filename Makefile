@@ -460,6 +460,17 @@ ifndef host_native_word_size
 	endif
 endif
 
+#JLO2 110714 Fix for Mac Support
+
+ifndef host_native_word_size
+	ifneq (,$(findstring intel-mac,$(HOSTTYPE)))
+		host_processor_family = x86
+		host_native_word_size = 64
+		host_supported_word_sizes = 32 64
+	endif
+endif
+
+
 ifndef host_native_word_size
    $(error Unable to determine host word size. $(HOSTTYPE))
 endif
@@ -1874,11 +1885,11 @@ ifneq ($(host_os_family),win)
 	$(ec)$(gprintf) "Installing ...\n"
 	mkdir -p $(lib_install_dir)/pkgconfig
 	mkdir -p $(include_install_dir)
-	install --mode=644 $(flaim_shared_lib) $(lib_install_dir)
-	install --mode=644 $(flaim_static_lib) $(lib_install_dir)
-	install --mode=644 $(pkgconfig_file) $(pkgconfig_install_dir)
-	install --mode=644 src/flaim.h $(include_install_dir)
-	install --mode=644 $(ftk_src_dir)/ftk.h $(include_install_dir)/flaimtk.h
+	install -m 644 $(flaim_shared_lib) $(lib_install_dir)
+	install -m 644 $(flaim_static_lib) $(lib_install_dir)
+	install -m 644 $(pkgconfig_file) $(pkgconfig_install_dir)
+	install -m 644 src/flaim.h $(include_install_dir)
+	install -m 644 $(ftk_src_dir)/ftk.h $(include_install_dir)/flaimtk.h
 ifneq ($(so_age),0)
 ifneq ($(so_revision),0)
 	cd $(lib_install_dir); ln -fs $(lib_prefix)$(project_name).so.$(so_current).$(so_revision).$(so_age) $(lib_prefix)$(project_name).so.$(so_current).$(so_revision) 
@@ -1887,8 +1898,12 @@ endif
 ifneq ($(so_revision),0)
 	cd $(lib_install_dir); ln -fs $(lib_prefix)$(project_name).so.$(so_current).$(so_revision) $(lib_prefix)$(project_name).so.$(so_current) 
 endif
+ifneq ($(host_os_family),osx)
 	cd $(lib_install_dir); ln -fs $(lib_prefix)$(project_name).so.$(so_current) $(lib_prefix)$(project_name).so
 	-ldconfig $(lib_install_dir)
+else
+	cd $(lib_install_dir); ln -fs $(lib_prefix)$(project_name).so.$(so_current) $(lib_prefix)$(project_name).so
+endif
 	$(ec)$(gprintf) "Installation complete.\n"
 endif
 

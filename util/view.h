@@ -54,7 +54,8 @@
 #define LFH_OPTION_LAST_BLOCK		0x2000
 #define BLK_OPTION_CHILD_BLOCK	0x1000
 
-EXTERN char * Labels[]
+/* JLO2 120109 - Changed char to const char to make g++ happy. */
+EXTERN const char * Labels[]
 #ifdef MAIN_MODULE
 = {
 	"File Header",								  /*0*/

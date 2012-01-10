@@ -24,7 +24,8 @@
 
 #include "view.h"
 
-FSTATIC char * Months[] = {
+/* JLO2 120109 - Changed char to const char to make g++ happy. */
+FSTATIC const char * Months[] = {
 	"Jan",
 	"Feb",
 	"Mar",

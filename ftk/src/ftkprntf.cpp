@@ -24,6 +24,10 @@
 //------------------------------------------------------------------------------
 
 #include "ftksys.h"
+// JLO2 110808: Next three lines added to stop a C++ compiler warning.
+#include <iostream>
+#include <string>
+using namespace std;
 
 /****************************************************************************
 Desc:		Parameter 'format' points to text following a '%' sign. Process
@@ -865,8 +869,11 @@ FLMINT FLMAPI f_printf(
 	iLen = formatter.strvPrintf( szTmpBuf, pszFormat, &args);
 	f_va_end(args);
 	
+// JLO2 110808: Altered to stop a C++ compiler warning.
 #ifndef FLM_RING_ZERO_NLM
-	fprintf( stdout, szTmpBuf);
+	string szTmpBufString(szTmpBuf);
+	//fprintf( stdout, szTmpBufString);
+	cout << szTmpBufString;
 	fflush( stdout);
 #endif
 
